@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generador de Facturas</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <style>
+        .icon {
+            width: 1rem;
+            height: 1rem;
+            margin-right: 0.5rem;
+            opacity: 0.7;
+        }
+        @media (max-width: 768px) {
+            .table-responsive {
+                overflow-x: auto;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light sticky-top bg-white shadow">
+        <div class="container">
+            <a class="navbar-brand" href="#" style="max-width: 150px;">
+                <img src="../Imagenes/logo.png" alt="Logo de la empresa" style="max-width: 100%; height: auto;">
+            </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="inventario.html">Inventario</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" data-toggle="modal" data-target="#contactModal">Ventas</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" data-toggle="modal" data-target="#loginModal">Cerrar sesión</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mx-auto p-4 max-w-4xl">
+        <div class="bg-white shadow-md rounded-lg p-6 mt-4">
+            <h2 class="text-2xl font-bold mb-6">Generar Factura Profesional</h2>
+            <form id="invoiceForm">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                    <div>
+                        <label for="name" class="block mb-1">Nombre del Cliente</label>
+                        <input id="name" name="name" class="w-full p-2 border rounded" required>
+                    </div>
+                    <div>
+                        <label for="email" class="block mb-1">Correo Electrónico del Cliente</label>
+                        <input id="email" name="email" type="email" class="w-full p-2 border rounded" required>
+                    </div>
+                    <div>
+                        <label for="phone" class="block mb-1">Teléfono del Cliente</label>
+                        <input id="phone" name="phone" type="tel" class="w-full p-2 border rounded" required>
+                    </div>
+                    <div>
+                        <label for="address" class="block mb-1">Dirección del Cliente</label>
+                        <input id="address" name="address" class="w-full p-2 border rounded" required>
+                    </div>
+                </div>
+
+                <div class="mb-6">
+                    <label for="search" class="block mb-1">Buscar productos (por código o nombre)</label>
+                    <input id="search" class="w-full p-2 border rounded" placeholder="Ingrese código o nombre del producto">
+                </div>
+
+                <div class="mb-6 table-responsive">
+                    <table class="w-full border-collapse border">
+                        <thead>
+                            <tr class="bg-gray-200">
+                                <th class="p-2 text-left">Código</th>
+                                <th class="p-2 text-left">Nombre</th>
+                                <th class="p-2 text-left">Precio</th>
+                                <th class="p-2 text-left">Acción</th>
+                            </tr>
+                        </thead>
+                        <tbody id="productList"></tbody>
+                    </table>
+                </div>
+
+                <div class="mb-6 table-responsive">
+                    <h3 class="text-lg font-semibold mb-2">Productos Seleccionados</h3>
+                    <table class="w-full border-collapse border">
+                        <thead>
+                            <tr class="bg-gray-200">
+                                <th class="p-2 text-left">Código</th>
+                                <th class="p-2 text-left">Nombre</th>
+                                <th class="p-2 text-left">Precio</th>
+                                <th class="p-2 text-left">Cantidad</th>
+                                <th class="p-2 text-left">Total</th>
+                                <th class="p-2 text-left">Acción</th>
+                            </tr>
+                        </thead>
+                        <tbody id="selectedProductList"></tbody>
+                    </table>
+                </div>
+
+                <div class="text-right mb-6">
+                    <p class="text-xl font-bold">Total: $<span id="totalAmount">0.00</span></p>
+                </div>
+
+                <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">Generar y Descargar Factura</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
+    <script>
+        const productos = [
+            { codigo: 'P001', nombre: 'Laptop', precio: 999.99 },
+            { codigo: 'P002', nombre: 'Smartphone', precio: 599.99 },
+            { codigo: 'P003', nombre: 'Auriculares', precio: 149.99 },
+            { codigo: 'P004', nombre: 'Monitor', precio: 299.99 },
+            { codigo: 'P005', nombre: 'Teclado', precio: 79.99 },
+        ];
+
+        const productosSeleccionados = [];
+        const cantidades = {};
+
+        function renderizarProductos() {
+            const listaProductos = document.getElementById('productList');
+            listaProductos.innerHTML = '';
+            const terminoBusqueda = document.getElementById('search').value.toLowerCase();
+
+            productos.forEach(producto => {
+                if (producto.codigo.toLowerCase().includes(terminoBusqueda) || producto.nombre.toLowerCase().includes(terminoBusqueda)) {
+                    const fila = document.createElement('tr');
+                    fila.innerHTML = `
+                        <td class="p-2">${producto.codigo}</td>
+                        <td class="p-2">${producto.nombre}</td>
+                        <td class="p-2">$${producto.precio.toFixed(2)}</td>
+                        <td class="p-2">
+                            <button type="button" class="bg-green-500 text-white px-2 py-1 rounded hover:bg-green-600" onclick="agregarProducto('${producto.codigo}')">
+                                Agregar
+                            </button>
+                        </td>
+                    `;
+                    listaProductos.appendChild(fila);
+                }
+            });
+        }
+
+        function renderizarProductosSeleccionados() {
+            const listaProductosSeleccionados = document.getElementById('selectedProductList');
+            listaProductosSeleccionados.innerHTML = '';
+
+            productosSeleccionados.forEach(producto => {
+                const fila = document.createElement('tr');
+                const cantidad = cantidades[producto.codigo] || 0;
+                const total = producto.precio * cantidad;
+                fila.innerHTML = `
+                    <td class="p-2">${producto.codigo}</td>
+                    <td class="p-2">${producto.nombre}</td>
+                    <td class="p-2">$${producto.precio.toFixed(2)}</td>
+                    <td class="p-2">
+                        <input type="number" min="1" value="${cantidad}" onchange="actualizarCantidad('${producto.codigo}', this.value)" class="w-20 p-1 border rounded">
+                    </td>
+                    <td class="p-2">$${total.toFixed(2)}</td>
+                    <td class="p-2">
+                        <button type="button" class="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600" onclick="eliminarProducto('${producto.codigo}')">
+                            Eliminar
+                        </button>
+                    </td>
+                `;
+                listaProductosSeleccionados.appendChild(fila);
+            });
+
+            actualizarTotal();
+        }
+
+        function agregarProducto(codigo) {
+            const producto = productos.find(p => p.codigo === codigo);
+            if (producto && !productosSeleccionados.find(p => p.codigo === codigo)) {
+                productosSeleccionados.push(producto);
+                cantidades[codigo] = 1;
+                renderizarProductosSeleccionados();
+            }
+        }
+
+        function eliminarProducto(codigo) {
+            const index = productosSeleccionados.findIndex(p => p.codigo === codigo);
+            if (index !== -1) {
+                productosSeleccionados.splice(index, 1);
+                delete cantidades[codigo];
+                renderizarProductosSeleccionados();
+            }
+        }
+
+        function actualizarCantidad(codigo, cantidad) {
+            cantidades[codigo] = parseInt(cantidad) || 0;
+            renderizarProductosSeleccionados();
+        }
+
+        function actualizarTotal() {
+            const total = productosSeleccionados.reduce((suma, producto) => {
+                return suma + (producto.precio * (cantidades[producto.codigo] || 0));
+            }, 0);
+            document.getElementById('totalAmount').textContent = total.toFixed(2);
+        }
+
+        document.getElementById('search').addEventListener('input', renderizarProductos);
+        document.getElementById('invoiceForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            generarFactura();
+        });
+
+        function generarFactura() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            const numeroFactura = Math.floor(100000 + Math.random() * 900000);
+            const fecha = new Date().toLocaleDateString();
+            const cliente = {
+                nombre: document.getElementById('name').value,
+                email: document.getElementById('email').value,
+                telefono: document.getElementById('phone').value,
+                direccion: document.getElementById('address').value,
+            };
+
+            // Encabezado de la factura
+            doc.setFontSize(18);
+            doc.text('Factura Proforma', 105, 20, null, null, 'center');
+            doc.setFontSize(12);
+            doc.text(`Numero de factura: ${numeroFactura}`, 20, 30);
+            doc.text(`Fecha: ${fecha}`, 20, 40);
+
+            // Información del cliente
+            doc.text('Información del Cliente:', 20, 55);
+            doc.text(`Nombre: ${cliente.nombre}`, 20, 65);
+            doc.text(`Email: ${cliente.email}`, 20, 75);
+            doc.text(`Teléfono: ${cliente.telefono}`, 20, 85);
+            doc.text(`Dirección: ${cliente.direccion}`, 20, 95);
+
+            // Detalles del producto
+            const productosFactura = productosSeleccionados.map(producto => {
+                const cantidad = cantidades[producto.codigo] || 0;
+                const total = producto.precio * cantidad;
+                return [producto.nombre, cantidad, `$${producto.precio.toFixed(2)}`, `$${total.toFixed(2)}`];
+            });
+
+            doc.autoTable({
+                startY: 105,
+                head: [['Producto', 'Cantidad', 'Precio Unitario', 'Total']],
+                body: productosFactura,
+            });
+
+            // Total
+            const totalGeneral = productosSeleccionados.reduce((suma, producto) => {
+                return suma + (producto.precio * (cantidades[producto.codigo] || 0));
+            }, 0);
+            doc.text(`Total: $${totalGeneral.toFixed(2)}`, 150, doc.lastAutoTable.finalY + 10);
+
+            // Guardar el PDF
+            doc.save(`factura_${numeroFactura}.pdf`);
+
+            // Mostrar mensaje de confirmación
+            alert(`La factura ha sido generada y descargada. Número de factura: ${numeroFactura}`);
+        }
+
+        renderizarProductos();
+    </script>
+</body>
+</html>

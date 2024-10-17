@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Francy_HBL - Productos</title>
+    <!-- Enlazamos Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" rel="stylesheet">
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    <link rel="icon" type="image/png" href="/FB-15-7-2024.jpg">
+    <!-- Estilos personalizados -->
+    <style>
+        /* Estilos generales */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #ffffff;
+            margin: 0;
+            padding: 0;
+        }
+
+        .navbar-light .navbar-nav .nav-link {
+            color: rgb(0 0 0);
+        }
+
+        .navbar-light .navbar-nav .nav-link:hover {
+            color: #007bff;
+        }
+
+        /* Estilos para el head */
+        head {
+            background-color: #a7a7a7;
+            box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1); /* Sombreado en los bordes inferiores */
+        }
+
+        /* Navbar */
+        .navbar {
+            color: #000000;
+            background-color: #ffffff;
+            border-bottom: #007bff;
+            box-shadow: 0px 10px 15px rgb(0, 0, 0); /* Sombreado en los bordes inferiores */
+            transition: top 0.3s ease-in-out;
+        }
+
+        .sticky-top {
+            top: 0;
+            animation: slideDown 0.5s ease;
+        }
+
+        @keyframes slideDown {
+            0% {
+                transform: translateY(-100%);
+            }
+
+            100% {
+                transform: translateY(0);
+            }
+        }
+
+        .product-section {
+            padding: 80px 0;
+            background-color: #f8f9fa;
+        }
+
+        .product-section h2 {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .product-card {
+            background-color: #ffffff;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s;
+            border-radius: 20px;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+            background-color: #e6e6e6;
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .product-card img {
+            width: 100%;
+            border-radius: 10px;
+            height: auto;
+        }
+
+        .product-card .btn-primary {
+            background-color: #26a522;
+            border-color: #007bff;
+            border-radius: 5px;
+            padding: 10px 20px;
+            display: block;
+            margin-top: 15px;
+        }
+
+        .product-card .btn-primary:hover {
+            background-color: #0056b3;
+            border-color: #0056b3;
+        }
+
+        #progressBar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 0%;
+    height: 5px;
+    background-color: #348544;
+    z-index: 9999;
+    transition: width 0.3s ease-out;
+}
+
+    </style>
+</head>
+<body>
+
+    <div id="progressBar"></div>
+
+
+<nav class="navbar navbar-expand-lg navbar-light sticky-top">
+    <div class="container">
+        <!-- Establecer un ancho máximo para el contenedor del logo -->
+        <a class="navbar-brand" href="#" style="max-width: 150px;">
+            <!-- Ajustar el tamaño de la imagen del logo -->
+            <img src="../Imagenes/logo.png" alt="Logo de la empresa" style="max-width: 100%; height: auto;">
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="../index.html">Inicio</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#" data-toggle="modal" data-target="#contactModal">Contacto</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#" data-toggle="modal" data-target="#loginModal">Iniciar sesión</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<section class="product-section">
+    <div class="container">
+        <h2>Catálogo de Productos</h2>
+        <div class="row">
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="product-card p-4">
+                    <h3>Producto 3</h3>
+                    <div id="carouselProducto3" class="carousel slide" data-ride="carousel">
+                        <div class="carousel-inner">
+                            <div class="carousel-item active">
+                                <img src="https://via.placeholder.com/300x200" class="d-block w-100"
+                                    alt="Imagen 1">
+                            </div>
+                            <div class="carousel-item">
+                                <img src="https://via.placeholder.com/300x200" class="d-block w-100"
+                                    alt="Imagen 2">
+                            </div>
+                            <div class="carousel-item">
+                                <img src="https://via.placeholder.com/300x200" class="d-block w-100"
+                                    alt="Imagen 3">
+                            </div>
+                        </div>
+                        <a class="carousel-control-prev" href="#carouselProducto3" role="button"
+                            data-slide="prev">
+                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                            <span class="sr-only">Anterior</span>
+                        </a>
+                        <a class="carousel-control-next" href="#carouselProducto3" role="button"
+                            data-slide="next">
+                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                            <span class="sr-only">Siguiente</span>
+                        </a>
+                    </div>
+                    <p class="mb-4">Descripción corta del producto 3.</p>
+                    <button class="btn btn-primary"
+                    onclick="mostrarProducto('Bebida de Proteína en Polvo (PDM)', 'https://via.placeholder.com/300x200', 'La Bebida de Proteína en Polvo es una excelente manera de reforzar tu consumo de proteínas, vitaminas y minerales. Las proteínas contribuyen a satisfacer el apetito. Es una mezcla en polvo para preparar bebida a base de proteína de soya, vitamins y minerales, con 18 g de proteína. Complementa la nutrición diaria.', 'Contiene 18g de proteína por porción', 'Ayuda a satisfacer el apetito y complementa la nutrición diaria.')">
+                    Ver más
+                </button>
+                </div>
+            </div>
+            <!-- Agrega más columnas y productos según sea necesario -->
+        </div>
+    </div>
+</section>
+
+<footer class="bg-dark text-white mt-5">
+    <div class="container py-4">
+        <div class="row">
+            <div class="col-md-6 col-sm-12">
+                <h5 class="text-center mb-4">Información de Contacto</h5>
+                <ul class="list-unstyled text-center">
+                    <li>Dirección: Calle 2 #93D-66</li>
+                    <li>Teléfono: 3208241166</li>
+                    <li>Email: info@empresa.com</li>
+                </ul>
+            </div>
+            <div class="col-md-6 col-sm-12">
+                <h5 class="text-center mb-4">Síguenos en Redes Sociales</h5>
+                <ul class="list-unstyled d-flex justify-content-center">
+                    <li class="mx-2"><a href="https://web.facebook.com/people/FrancyHbl/61558984792112/" target="_blank">Facebook</a></li>
+                    <li class="mx-2"><a href="https://x.com/francyhbl?mx=2" target="_blank">Twitter</a></li>
+                    <li class="mx-2"><a href="https://www.instagram.com/francyhbl/" target="_blank">Instagram</a></li>
+                    <li class="mx-2"><a href="https://www.tiktok.com/@francy_hbl?_t=8lkQnpLmxtN&_r=1" target="_blank">Tik Tok</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="row mt-3">
+            <div class="col-md-12 text-center">
+                <p>&copy; 2024 Hecho por JSCH. <br> <br> Todos los derechos reservados.</p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- Modal de Inicio de Sesión -->
+<div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Iniciar Sesión</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="loginForm">
+                    <div class="form-group">
+                        <label for="email">Correo electrónico:</label>
+                        <input type="email" class="form-control" id="email" name="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Contraseña:</label>
+                        <input type="password" class="form-control" id="password" name="password" required>
+                    </div>
+                    <!-- Campo oculto para el token de reCAPTCHA v3 -->
+                    <input type="hidden" id="recaptchaToken" name="recaptchaToken">
+                    <button type="submit" class="btn btn-primary btn-block">Iniciar Sesión</button>
+                    <a href="#" class="mt-2 d-block text-center">¿Olvidaste tu contraseña?</a>
+                    <div class="text-center mt-3">
+                        <span>O</span>
+                    </div>
+                    <a href="#" class="btn btn-outline-primary btn-block mt-3">Crear cuenta</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal de Contacto -->
+<div class="modal fade" id="contactModal" tabindex="-1" role="dialog" aria-labelledby="contactModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="contactModalLabel">Contacto</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <label for="nombre">Nombre:</label>
+                        <input type="text" class="form-control" id="nombre" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="correo">Correo electrónico:</label>
+                        <input type="email" class="form-control" id="correo" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="mensaje">Mensaje:</label>
+                        <textarea class="form-control" id="mensaje" rows="5" required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-block">Enviar mensaje</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <!-- Modal de detalles del producto -->
+    <div class="modal fade" id="productoModal" tabindex="-1" role="dialog" aria-labelledby="productoModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="productoModalLabel">Detalles del Producto</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body text-center">
+                <img src="" id="productoImagenModal" class="img-fluid mb-3" alt="Imagen del Producto">
+                <p id="productoDescripcionModal"></p>
+                <p id="productoCaracteristicasModal"></p>
+                <p id="productoBeneficiosModal"></p>
+            </div>
+        </div>
+    </div>
+    </div>
+
+<!-- Enlazamos Bootstrap JS, Popper.js y jQuery -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+
+        <!-- Script para SweetAlert2 -->
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+
+        <script>
+    // Función para mostrar el modal con los detalles del producto
+    function mostrarProducto(nombre, imagen, descripcion, caracteristicas, beneficios) {
+        // Actualizar contenido del modal
+        document.getElementById('productoModalLabel').textContent = nombre;
+        document.getElementById('productoImagenModal').setAttribute('src', imagen);
+        document.getElementById('productoDescripcionModal').textContent = descripcion;
+        document.getElementById('productoCaracteristicasModal').textContent = "Características: " + caracteristicas;
+        document.getElementById('productoBeneficiosModal').textContent = "Beneficios: " + beneficios;
+    
+        // Mostrar el modal
+        $('#productoModal').modal('show');
+    }
+    
+        </script>
+
+        <script>
+            $(document).ready(function () {
+    $(window).scroll(function () {
+        // Calcular el porcentaje de scroll
+        var scroll = $(window).scrollTop();
+        var windowHeight = $(window).height();
+        var bodyHeight = $(document).height();
+        var progress = (scroll / (bodyHeight - windowHeight)) * 100;
+
+        // Actualizar el ancho de la barra de progreso
+        $('#progressBar').css('width', progress + '%');
+    });
+});
+
+        </script>
+
+</body>
+</html>

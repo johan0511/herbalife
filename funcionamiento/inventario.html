@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inventario</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <style>
+        .navbar {
+            color: #000000;
+            background-color: #ffffff;
+            border-bottom: #007bff;
+            box-shadow: 0px 10px 15px rgb(0, 0, 0);
+            transition: top 0.3s ease-in-out;
+        }
+
+        .navbar-light .navbar-nav .nav-link {
+            color: rgb(0, 0, 0);
+        }
+
+        /* Estilos para la tabla */
+        .table-custom {
+            border-collapse: separate;
+            border-spacing: 0;
+            width: 100%;
+        }
+
+        .table-custom thead th {
+            background-color: #007bff;
+            color: #ffffff;
+            text-align: center;
+        }
+
+        .table-custom tbody tr {
+            transition: background-color 0.3s ease;
+        }
+
+        .table-custom tbody tr:hover {
+            background-color: #f8f9fa;
+        }
+
+        .table-custom td {
+            vertical-align: middle;
+        }
+
+        .btn-sm {
+            font-size: 0.875rem;
+            padding: 0.25rem 0.5rem;
+        }
+
+        .btn-disabled {
+            pointer-events: none;
+            opacity: 0.6;
+        }
+    </style>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-light sticky-top">
+    <div class="container">
+        <a class="navbar-brand" href="#" style="max-width: 150px;">
+            <img src="../Imagenes/logo.png" alt="Logo de la empresa" style="max-width: 100%; height: auto;">
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="factura.html">Factura</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#" data-toggle="modal" data-target="#contactModal">Ventas</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#" data-toggle="modal" data-target="#loginModal">Cerrar sesión</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="container-fluid mt-5">
+    <h2 class="mb-4">Inventario</h2>
+
+    <button type="button" class="btn btn-primary mb-3" data-toggle="modal" data-target="#agregarProductoModal">
+        Agregar Producto
+    </button>
+
+    <div class="table-responsive">
+        <table class="table table-custom">
+            <thead class="thead-dark">
+                <tr>
+                    <th>Nombre Producto</th>
+                    <th>Cantidad</th>
+                    <th>Precio Compra</th>
+                    <th>Precio Venta</th>
+                    <th>% de Ganancia</th>
+                    <th>Ganancias Totales</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody id="tablaInventario">
+                <!-- Aquí se generan dinámicamente las filas de la tabla con JavaScript -->
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Modal para agregar producto -->
+<div class="modal fade" id="agregarProductoModal" tabindex="-1" role="dialog" aria-labelledby="agregarProductoModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="agregarProductoModalLabel">Agregar Nuevo Producto</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="formularioProducto">
+                    <div class="form-group">
+                        <label for="nombreProducto">Nombre Producto</label>
+                        <input type="text" class="form-control" id="nombreProducto" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="cantidad">Cantidad</label>
+                        <input type="number" class="form-control" id="cantidad" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="precioCompra">Precio Compra</label>
+                        <input type="number" step="0.01" class="form-control" id="precioCompra" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="precioVenta">Precio Venta</label>
+                        <input type="number" step="0.01" class="form-control" id="precioVenta" required>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary" onclick="agregarProducto()">Agregar Producto</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal para agregar cantidad -->
+<div class="modal fade" id="agregarCantidadModal" tabindex="-1" role="dialog" aria-labelledby="agregarCantidadModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="agregarCantidadModalLabel">Agregar Cantidad</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="formularioCantidad">
+                    <div class="form-group">
+                        <label for="cantidadAgregar">Cantidad a Agregar</label>
+                        <input type="number" class="form-control" id="cantidadAgregar" required>
+                        <input type="hidden" id="productoIndex">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary" onclick="agregarCantidad()">Agregar Cantidad</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+<script>
+    let currentRow;
+
+    function agregarProducto() {
+        const nombre = document.getElementById("nombreProducto").value;
+        const cantidad = parseInt(document.getElementById("cantidad").value);
+        const precioCompra = parseFloat(document.getElementById("precioCompra").value);
+        const precioVenta = parseFloat(document.getElementById("precioVenta").value);
+
+        const porcentajeGanancia = (precioVenta - precioCompra) / precioCompra * 100;
+        const gananciaTotal = (precioVenta - precioCompra) * cantidad;
+
+        const fila = `<tr>
+                        <td>${nombre}</td>
+                        <td>${cantidad}</td>
+                        <td>${precioCompra.toFixed(2)}</td>
+                        <td>${precioVenta.toFixed(2)}</td>
+                        <td>${porcentajeGanancia.toFixed(1.5)}%</td>
+                        <td>${gananciaTotal.toFixed(2)}</td>
+                        <td>
+                            <button class="btn btn-warning btn-sm" onclick="mostrarAgregarCantidad(this)">Agregar Cantidad</button>
+                            <button class="btn btn-danger btn-sm" onclick="desactivarProducto(this)">Desactivar Producto</button>
+                        </td>
+                    </tr>`;
+
+        document.getElementById("tablaInventario").innerHTML += fila;
+
+        document.getElementById("formularioProducto").reset();
+        $('#agregarProductoModal').modal('hide');
+    }
+
+    function mostrarAgregarCantidad(button) {
+        currentRow = button.closest("tr");
+        $('#agregarCantidadModal').modal('show');
+    }
+
+    function agregarCantidad() {
+        const cantidadAgregar = parseInt(document.getElementById("cantidadAgregar").value);
+
+        const cantidadActual = parseInt(currentRow.cells[1].innerText);
+        const nuevoCantidad = cantidadActual + cantidadAgregar;
+        currentRow.cells[1].innerText = nuevoCantidad;
+
+        const precioCompra = parseFloat(currentRow.cells[2].innerText);
+        const precioVenta = parseFloat(currentRow.cells[3].innerText);
+
+        const gananciaTotal = (precioVenta - precioCompra) * nuevoCantidad;
+        currentRow.cells[5].innerText = gananciaTotal.toFixed(2);
+
+        document.getElementById("formularioCantidad").reset();
+        $('#agregarCantidadModal').modal('hide');
+    }
+
+    function desactivarProducto(button) {
+        if (confirm('¿Está seguro de que desea desactivar este producto?')) {
+            const row = button.closest("tr");
+            const cantidadCell = row.cells[1];
+            const cantidadOriginal = cantidadCell.innerText;
+
+            // Cambiar el texto de la cantidad a "Unidades no disponible"
+            cantidadCell.innerText = "Unidades no disponible";
+
+            // Desactivar el botón "Agregar Cantidad" y "Desactivar Producto"
+            const actionsCell = row.cells[6];
+            actionsCell.innerHTML = `
+                <button class="btn btn-warning btn-sm btn-disabled" disabled>Agregar Cantidad</button>
+                <button class="btn btn-danger btn-sm btn-disabled" disabled>Desactivar Producto</button>
+            `;
+        }
+    }
+</script>
+
+</body>
+</html>
